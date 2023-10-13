@@ -2,9 +2,9 @@ import axios from 'axios';
 
 //BASE URL for API req
 const instance = axios.create({
-  baseURL: `http://localhost:8080`
-  //'https://bhr-server-9omo.onrender.com'
-
+  baseURL: `https://user-server-np4c.onrender.com`
+  //`http://localhost:8080`
+  //'https://user-server-np4c.onrender.com'
 });
 
 // Retrieve the token from your localStorage or wherever it is stored
