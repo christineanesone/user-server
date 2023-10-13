@@ -35,8 +35,21 @@ const signIn = async (email, password) => {
 };
 
 // Sign out
-const signOut = () => {
-  localStorage.removeItem("user");
+const signOut = async () => {
+  try {
+    // Make a request to the sign-out endpoint on the server
+    await axiosInstance.post(`${API_URL}/signOut`);
+
+    // Clear the user data from localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
+    // Return a success message or handle the sign-out success
+    return { success: true, message: "Sign out successful" };
+  } catch (error) {
+    console.error("Sign out failed:", error);
+    throw error;
+  }
 };
 
 const authService = {
