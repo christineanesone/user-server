@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../api";
 import {
   Dialog,
   DialogTitle,
@@ -35,7 +35,7 @@ const ScheduleDialog = ({ open, onClose, scheduleType, applicantId }) => {
       const endpoint = "/api/schedule${scheduleType}/${applicantId}";
       const data = { interviewLink: link };
 
-      await axios.post(endpoint, data);
+      await axiosInstance.post(endpoint, data);
       showNotification("Link sent successfully", "success");
       onClose();
     } catch (error) {

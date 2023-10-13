@@ -1,16 +1,16 @@
 import {setUser, setLoading, setError } from "../user/userSlice";
-import axios from "axios";
+import axiosInstance from "../../api";
 const API_URL = "/api/users/";
 
 export const fetchUser = () => async (dispatch) => {
   try {
-    const response = await axios.get(API_URL + "info");
+    const response = await axiosInstance.get(API_URL + "info");
 
     //set response data to userData
     const userData = response.data;
-
+    const userId = response.data.id;
     // Dispatch the setUser action with the fetched user data
-    dispatch(setUser(userData));
+    dispatch(setUser({ user: userData, id: userId }));
   } catch (error) {
     if (error.response) {
       console.error("Server Error:", error.response.data);
@@ -30,10 +30,10 @@ export const updateAdminProfile = (updatedProfile) => async (dispatch) => {
 
   try {
     // Send a PUT request to update the admin user's profile
-    await axios.put(API_URL + `admin/updateProfile`, updatedProfile);
+    await axiosInstance.put(API_URL + `admin/updateProfile`, updatedProfile);
 
     // Fetch the updated user data after the profile is updated
-    const response = await axios.get(API_URL + "info");
+    const response = await axiosInstance.get(API_URL + "info");
 
     // Dispatch the setUser action with the updated user data
     // Update user data in localStorage

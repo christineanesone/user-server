@@ -19,7 +19,7 @@ import Notification from "../component/common/Notification/notification";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.user.user);
   const loading = useSelector((state) => state.user.loading);
   const [formData, setFormData] = useState({
     firstName: "",

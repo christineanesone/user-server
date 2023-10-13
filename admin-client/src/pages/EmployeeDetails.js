@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../api";
 import {
   Container,
   Typography,
@@ -45,7 +45,7 @@ const EmployeeDetails = () => {
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `/api/users/employeesDetails/employee/${employeeId}`
         );
         setEmployeeDetails(response.data);
@@ -63,7 +63,7 @@ const EmployeeDetails = () => {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await axios.get("/api/applicants/applicant");
+        const response = await axiosInstance.get("/api/applicants/applicant");
         setAllApplicants(response.data);
       } catch (error) {
         console.log(error);
@@ -112,7 +112,7 @@ Belle Babysitting`;
   };
 
   const handleRoleChange = (userId, newRole) => {
-    axios
+    axiosInstance
       .put(
         `/api/users/setUser${newRole === "active" ? "Active" : "Inactive"
         }/${userId}`
@@ -137,7 +137,7 @@ Belle Babysitting`;
 
   // update Police Expiry Date
   const updatePoliceExpiryDate = () => {
-    axios.put(`/api/users/employeesDetails/employee/${employeeId}/policeExpiryDate`,
+    axiosInstance.put(`/api/users/employeesDetails/employee/${employeeId}/policeExpiryDate`,
       {
         policeExpiryDate: employeeDetails.policeExpiryDate,
       }
@@ -166,7 +166,7 @@ Belle Babysitting`;
 
   //Updating employee blurb:
   const updateEmployeeBlurb = () => {
-    axios.put(`/api/users/employeesDetails/employee/${employeeId}/employeeBlurb`,
+    axiosInstance.put(`/api/users/employeesDetails/employee/${employeeId}/employeeBlurb`,
       {
         employeeBlurb: employeeDetails.employeeBlurb,
       }
@@ -350,27 +350,8 @@ Belle Babysitting`;
                     )}
                   </TableCell>
                 </TableRow>
-
-                {/* Need to add more */}
                 <TableRow>
-                  {/* <TableCell>
-                    ----- INSERT MORE DETAILS IF NEEDED ---------
-                  </TableCell> */}
-                  {/* <TableCell>
-                    <Button
-                      type="button"
-                      variant="contained"
-                      color="primary"
-                      onClick={handleStatusChange}
-                    >
-                      Set{" "}
-                      {employeeDetails.role === "active"
-                        ? "Inactive"
-                        : "Active"}
-                    </Button>{" "}
-                  </TableCell> */}
                   <TableCell></TableCell>{" "}
-                  {/* Additional TableCell for alignment */}
                 </TableRow>
               </TableBody>
             </Table>

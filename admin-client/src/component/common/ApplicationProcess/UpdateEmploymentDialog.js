@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../api";
 import {
   Dialog,
   DialogTitle,
@@ -41,7 +41,7 @@ function UpdateEmploymentDialog({ open, onClose, applicantId }) {
       const updatedStatus = selectedStatus;
       console.log(applicantId);
       console.log(updatedStatus);
-      await axios.put(`/api/applicants/applicant/updateStatus/${applicantId}`, {
+      await axiosInstance.put(`/api/applicants/applicant/updateStatus/${applicantId}`, {
         updatedStatus,
         attribute,
       });

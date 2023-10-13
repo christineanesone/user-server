@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import axiosInstance from "../api";
 import {
   Container,
   Typography,
@@ -19,6 +19,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import BadgeIcon from "@mui/icons-material/Badge";
 import ErrorIcon from "@mui/icons-material/Error";
 import Chart from "chart.js/auto";
+import LoadingSpinner from "../component/common/LoadingSpinner/LoadingSpinner";
 
 const HomePage = () => {
   const currentUser = useSelector((state) => state.auth.user);
@@ -28,6 +29,7 @@ const HomePage = () => {
   const [expiredFirstAidEmployees, setExpiredFirstAidEmployees] = useState([]);
   const [expiredPoliceCheckEmployees, setExpiredPoliceCheckEmployees] =
     useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Dispatch the action to fetch user data when the component mounts
@@ -38,7 +40,8 @@ const HomePage = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("/api/users/employees");
+        setLoading(true);
+        const response = await axiosInstance.get("/api/users/employees");
         setEmployees(response.data);
 
         // Filter out employees whose firstAidExpiration date has passed
@@ -48,7 +51,7 @@ const HomePage = () => {
           return expiryDate < currentDate;
         });
         setExpiredFirstAidEmployees(expiredEmployees);
-
+        setLoading(false);
         // Filter out employees whose policeExpiryDate has passed
         const policeExpiredEmployees = response.data.filter((employee) => {
           const expiryDatePolice = new Date(employee.policeExpiryDate);
@@ -56,6 +59,7 @@ const HomePage = () => {
           return expiryDatePolice < currentDatePolice;
         });
         setExpiredPoliceCheckEmployees(policeExpiredEmployees);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -67,9 +71,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await axios.get(`/api/applicants/applicant`);
-
+        setLoading(true);
+        const response = await axiosInstance.get(`/api/applicants/applicant`);
         setApplicants(response.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -92,8 +97,10 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    if (applicants.length === 0) return; // Do nothing if there's no data yet
-
+    if (loading || applicants.length === 0) {
+      setLoading(true); 
+      return; // Do nothing if there's no data yet or if still loading
+    }
     const inProgress = applicants.filter(
       (app) => app.applicationStatus === "In Progress"
     ).length;
@@ -126,13 +133,14 @@ const HomePage = () => {
       options: chartOptions,
     });
 
+    setLoading(false); 
     // Cleanup function to destroy chart instance
     return () => {
       if (myChart) {
         myChart.destroy();
       }
     };
-  }, [applicants]);
+  }, [loading, applicants]);
 
   return (
     <div className="page-container">
@@ -168,6 +176,7 @@ const HomePage = () => {
 
                         <Typography variant="h5">{employees.length}</Typography>
                       </CardContent>
+                      {loading && <LoadingSpinner />} 
                     </CardActionArea>
                   </Link>
                 </Card>
@@ -193,6 +202,7 @@ const HomePage = () => {
                           {applicants.length}
                         </Typography>
                       </CardContent>
+                      {loading && <LoadingSpinner />} 
                     </CardActionArea>
                   </Link>
                 </Card>
@@ -224,7 +234,7 @@ const HomePage = () => {
                   </Typography>
 
                   <Divider style={{ width: "100%", margin: "8px 0" }} />
-
+                  {loading && <LoadingSpinner />} 
                   {expiredFirstAidEmployees.map((emp) => (
                     <Typography variant="body1" key={emp._id}>
                       {emp.firstName} {emp.lastName}
@@ -257,7 +267,7 @@ const HomePage = () => {
                   <Typography variant="h5">Expired Police Checks</Typography>
 
                   <Divider style={{ width: "100%", margin: "8px 0" }} />
-
+                  {loading && <LoadingSpinner />} 
                   {expiredPoliceCheckEmployees.map((emp) => (
                     <Typography variant="body1" key={emp._id}>
                       {emp.firstName} {emp.lastName}
@@ -270,21 +280,20 @@ const HomePage = () => {
 
           {/* Right Section - Components */}
           <Grid item xs={12} md={4}>
-            <Card style={{ marginTop: '10px' }}>
+            <Card style={{ marginTop: "10px" }}>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   Applications In Progress vs Completed
                 </Typography>
 
-                <Divider style={{ width: '100%', margin: '8px 0' }} />
-
-                <div style={{ height: '317px' }}>
+                <Divider style={{ width: "100%", margin: "8px 0" }} />
+                {loading && <LoadingSpinner />} 
+                <div style={{ height: "317px" }}>
                   <canvas ref={chartRef} />
                 </div>
               </CardContent>
             </Card>
           </Grid>
-
         </Grid>
       </Container>
     </div>

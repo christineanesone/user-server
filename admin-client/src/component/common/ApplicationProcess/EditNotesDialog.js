@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../../api";
+
 import {
   Dialog,
   DialogTitle,
@@ -36,7 +37,7 @@ function EditNotesDialog({ open, onClose, applicantId, notes }) {
       console.log(applicantId);
       console.log(newNotes); // Use newNotes, not notes
 
-      await axios.put(`https://bhr-server-9omo.onrender.com/api/users/editNotes/${applicantId}`, {
+      await axiosInstance.put(`https://bhr-server-9omo.onrender.com/api/users/editNotes/${applicantId}`, {
         newNotes,
       });
       showNotification("Status updated!", "success");

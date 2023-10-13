@@ -16,6 +16,7 @@ import NavBar from "../component/common/NavBar";
 import Notification from "../component/common/Notification";
 import Footer from "../component/common/Footer";
 import styled from "styled-components";
+import LoadingSpinner from "../component/common/LoadingSpinner";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -46,6 +47,7 @@ const SignIn = () => {
     horizontal: "right",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { email, password } = formData;
 
@@ -87,6 +89,7 @@ const SignIn = () => {
     }
 
     try {
+      setLoading(true);
       const response = await dispatch(signIn({ email, password }));
       const data = response.payload;
 
@@ -115,6 +118,8 @@ const SignIn = () => {
         "Sign in failed. Please check console for details.",
         "error"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,12 +186,15 @@ const SignIn = () => {
                   variant="contained"
                   color="primary"
                   style={{ margin: "24px 0 16px" }}
+                  disabled={loading} // Disable the button while loading is true
                 >
-                  Sign In
+                  {loading ? <LoadingSpinner /> : "Sign In"}
                 </Button>
                 <Typography variant="body1" align="center">
                   Don't have an account?{" "}
-                  <Link to="/sign-up" style={{ color: "primary" }}>Sign up here</Link>
+                  <Link to="/sign-up" style={{ color: "primary" }}>
+                    Sign up here
+                  </Link>
                 </Typography>
               </FormWrapper>
             </div>

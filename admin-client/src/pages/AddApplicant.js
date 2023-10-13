@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../api";
 import {
   TextField,
   Button,
@@ -105,7 +105,7 @@ function AddApplicant() {
 
     try {
       // Send a POST request to create the applicant
-      const { data } = await axios.post(
+      const { data } = await axiosInstance.post(
         "/api/applicants/add-applicant",
         applicant
       );
@@ -184,7 +184,7 @@ function AddApplicant() {
 
       console.log("ID in uploadFile Function:", applicantId);
       console.log("Attribute in upload function:", attribute);
-      const uploadRequest = await axios.post(
+      const uploadRequest = await axiosInstance.post(
         `/api/users/uploadFile/${applicantId}?attribute=${attribute}`,
         formData,
         {

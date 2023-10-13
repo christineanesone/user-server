@@ -10,6 +10,7 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload.user;
+      state.id = action.payload.id;
       state.loading = false; // Set loading state to false when user data is updated
       state.error = null; // Reset error state
     },

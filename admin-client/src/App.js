@@ -18,14 +18,6 @@ import PrivateRoutes from "./component/utils/Private_Routes/PrivateRoutes";
 import theme from "./styles/theme";
 
 const App = () => {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    fetch("https://bhr-server-9omo.onrender.com")
-      .then((response) => response.json())
-      .then((data) => setMessage(data.message));
-  }, []);
-
   return (
     <ThemeProvider theme={theme}>
       <Router>

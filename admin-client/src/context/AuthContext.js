@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import axios from "axios";
+import axiosInstance from "../api";
 
 const AuthContext = createContext();
 
@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
   // Handle user signIn
   const signIn = async (email, password, navigate) => {
     try {
-      const { data } = await axios.post("/api/users/signIn", {
+      const { data } = await axiosInstance.post("/api/users/signIn", {
         email,
         password,
       });
@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
       localStorage.setItem('userToken', data.token);
 
       // Set the token as an authentication header for Axios
-      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
 
       // Redirect to the signed-in page
       navigate("/home");
@@ -70,11 +70,11 @@ export function AuthProvider({ children }) {
 // Handle user signOut
 const signOut = async () => {
   try {
-    await axios.post('/api/users/signOut'); // Request signOut route from server side
+    await axiosInstance.post('/api/users/signOut'); // Request signOut route from server side
     // Clear the token from local storage
     localStorage.removeItem('userToken');
     // Remove the token from Axios headers
-    delete axios.defaults.headers.common['Authorization'];
+    delete axiosInstance.defaults.headers.common['Authorization'];
     
     dispatch({ type: 'signOut' });
   } catch (err) {

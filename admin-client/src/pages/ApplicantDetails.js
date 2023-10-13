@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TextField } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../api";
 import {
   Container,
   Typography,
@@ -65,7 +65,7 @@ const ApplicantDetails = () => {
   useEffect(() => {
     const fetchApplicantDetails = async () => {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `/api/applicants/applicantsDetails/applicant/${applicantId}`
         );
         setApplicantDetails(response.data);
@@ -211,7 +211,7 @@ const ApplicantDetails = () => {
   const handleSaveInterviewDate = async () => {
     if (faceToFaceInterviewDate) {
       try {
-        await axios.put(
+        await axiosInstance.put(
           `/api/applicants/saveInterviewDate/applicant/${applicantId}`,
           { faceToFaceInterviewDate }
         );
@@ -234,7 +234,7 @@ const ApplicantDetails = () => {
   const handleSaveInductionDate = async () => {
     if (inductionDate) {
       try {
-        await axios.put(
+        await axiosInstance.put(
           `/api/applicants/saveInductionDate/applicant/${applicantId}`,
           { inductionDate }
         );
@@ -302,7 +302,7 @@ const ApplicantDetails = () => {
 
   const saveRefereesToDatabase = async (selected) => {
     try {
-      const response = await axios.post(`/api/applicants/saveReferees/applicant/${applicantId}`, {
+      const response = await axiosInstance.post(`/api/applicants/saveReferees/applicant/${applicantId}`, {
         applicantId,
         selectedReferees: selected,
       
@@ -361,7 +361,7 @@ const ApplicantDetails = () => {
 
     // Pulling data
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `/api/users/getPDF/${applicantId}?attribute=${attribute}`
       );
 

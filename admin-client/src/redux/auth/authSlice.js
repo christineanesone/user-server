@@ -12,28 +12,17 @@ const initialState = {
 // Sign in admin
 export const signIn = createAsyncThunk(
   "auth/signIn",
-  async (user, thunkAPI) => {
+  async ({ email, password }, thunkAPI) => {
     try {
-      const response = await authService.signIn(user);
-      if (response.isAdmin) {
-        return response; // If isAdmin is true, return the user data
-      } else {
-        return thunkAPI.rejectWithValue({
-          message: "You are not authorized as an admin.",
-        });
-      }
+      const user = await authService.signIn(email, password);
+      return user;
     } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue({ message });
+      return thunkAPI.rejectWithValue({
+        message: error.message,
+      });
     }
   }
 );
-
 //Sign out admin
 export const signOut = createAsyncThunk("auth/signOut", async () => {
   await authService.signOut();

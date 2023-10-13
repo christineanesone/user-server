@@ -2,7 +2,7 @@
 // CURRENTLY IN THIS LOCATION TO TEST THE FUNCTION AND USABILITY 
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from "../../../api";
 
 const UploadComponent = (props) => {
   const [file, setFile] = useState(null);
@@ -17,7 +17,7 @@ const UploadComponent = (props) => {
     formData.append('pdf', file);
 
     try {
-      const response = await axios.post(`/api/uploadFile/${applicantId}`, formData, {
+      const response = await axiosInstance.post(`/api/uploadFile/${applicantId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

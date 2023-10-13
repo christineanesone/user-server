@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../../api";
 import {
   Dialog,
   DialogTitle,
@@ -62,7 +62,7 @@ function UploadFileDialog({
     console.log(applicantId);
     console.log(formData);
     console.log(attribute);
-    axios.post(`/api/users/uploadFile/${applicantId}?attribute=${attribute}`, formData, {
+    axiosInstance.post(`/api/users/uploadFile/${applicantId}?attribute=${attribute}`, formData, {
     })
       .then((response) => {
         console.log(response);

@@ -287,8 +287,11 @@ exports.uploadController = async (req, res) => {
     }
 
     const { applicantId } = req.params;
+    console.log("req params:", req.params);
     const applicant = await Applicant.findById(applicantId);
+    console.log("Applicant", await Applicant.findById(applicantId));
     const attribute = req.query.attribute;
+    console.log("attribute",req.query.attribute);
 
     console.log(attribute);
 

@@ -66,7 +66,6 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     if (!email || !password) {
       showNotification("Please fill out all fields", "error");
       return;
@@ -81,26 +80,40 @@ const SignIn = () => {
       return;
     }
 
-    // Dispatch the signIn action from Auth state
-    dispatch(signIn({ email, password }))
-      .unwrap()
-      .then(() => {
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await dispatch(signIn({ email, password }));
+      const data = response.payload;
+      console.log("Email:", email);
+      console.log("Password:", password);
+      console.log("API Response:", response);
+      if (data.success === true) {
+        // Store the token
+        localStorage.setItem("token", data.token);
+
+        // Handle successful login notification
         showNotification("Sign in successful", "success");
+
+        // Redirect to profile
         navigate("/home");
-      })
-      .catch((error) => {
-        // Handle error if needed
-        setIsLoading(false);
-        console.error("Sign-in failed:", error);
-        showNotification("Sign in failed - check console", "error");
-        // Extract error message from the payload and show notification
-        if (error.payload && error.payload.message) {
-          showNotification(error.payload.message, "error");
-        } else {
-          showNotification("Sign-in failed. Please try again.", "error");
-        }
-      });
+      } else {
+        // Handle unsuccessful login notification
+        showNotification(
+          "Incorrect email or password. Please try again.",
+          "error"
+        );
+      }
+    } catch (error) {
+      // Handle login error
+      console.error("Sign in error:", error);
+      // Handle unsuccessful login notification
+      showNotification(
+        "Sign in failed. Please check console for details.",
+        "error"
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
