@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //BASE URL for API req
 const instance = axios.create({
-  baseURL: `https://bhr-server-9omo.onrender.com`
+  baseURL: `https://user-server-np4c.onrender.com`
   //`http://localhost:8080`
 
 });
